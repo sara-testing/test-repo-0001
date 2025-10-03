@@ -41,8 +41,8 @@ func seedUserData(filename string) {
 
 	for i := 0; i < len(users); i++ {
 		user := users[i]
-		insertUserQuery := fmt.Sprintf("INSERT INTO user VALUES (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s');", i+1, user.FirstName, user.LastName, user.Company, user.Title, user.Email, user.Phone, user.DOB, user.SSN, user.Salary, user.Admin)
-		_, err = db.Exec(insertUserQuery)
+		insertUserQuery := "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+		_, err = db.Exec(insertUserQuery, i+1, user.FirstName, user.LastName, user.Company, user.Title, user.Email, user.Phone, user.DOB, user.SSN, user.Salary, user.Admin)
 		if err != nil {
 			panic(err)
 		}
@@ -54,8 +54,9 @@ func getUsers(search string) []User {
 	if err != nil {
 		panic(err)
 	}
-	selectUsersQuery := "SELECT * FROM user WHERE (first_name LIKE '%" + search + "%' OR last_name LIKE '%" + search + "%') AND admin == 'false';"
-	rows, err := db.Query(selectUsersQuery)
+	selectUsersQuery := "SELECT * FROM user WHERE (first_name LIKE ? OR last_name LIKE ?) AND admin == 'false';"
+	searchPattern := "%" + search + "%"
+	rows, err := db.Query(selectUsersQuery, searchPattern, searchPattern)
 	if err != nil {
 		panic(err)
 	}
