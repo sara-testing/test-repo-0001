@@ -1,5 +1,0 @@
-FROM scratch
-
-ADD https://pkg.contrastsecurity.com/artifactory/contrast-service-release/latest/linux-amd64/contrast-service /bin/contrast-service
-
-ENTRYPOINT [ "/bin/contrast-service" ]
